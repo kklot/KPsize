@@ -2,6 +2,8 @@
 
 This is a base R code for fitting the model and extrapolate the sex initiation curve for UNAIDS key population estimates paper. While the data are freely available, it was not allow to redistribute. If needed, please contact k dot nguyen at imperial dot ac dot uk for information how to access and download.
 
+- `data/nbmat.rds` neighbourhood structure of the countries in the model.
+- `ne_10m_admin_0_countries_s01.gpkg` original map.
 - `data/AFS_full.csv.bz2` is curated from three survey sources: DHS, NSFG and
   HBSC surveys.
 - `code/smooth_KP_proportion.R`: this was used to extrapolate prevalence using Besag's model.
