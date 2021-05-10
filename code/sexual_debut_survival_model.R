@@ -9,13 +9,16 @@ require(data.table)
 mydat <- fread('data/AFS_full.csv.bz2')
 nbmat <- readRDS('data/nbmat.rds')
 
-mydat[, .N, ISO_A2] # included missing data countries to predict
-mydat[, .(svy_weight = sum(scaled_w), .N), ISO_A2]
+# included missing data countries to predict
+mydat[, .N, ISO_A2] 
+# survey weight scaled by sample size
+mydat[, .(svy_weight = sum(scaled_w), .N), ISO_A2] 
 
 # INLA options
 #-----------------------------------------------------------------------------
 inla.setOption("enable.inla.argument.weights", TRUE)
-assign("enable.model.likelihood.loglogisticsurv", TRUE, envir=INLA:::inla.get.inlaEnv())
+assign("enable.model.likelihood.loglogisticsurv", TRUE, 
+       envir=INLA:::inla.get.inlaEnv())
 c_inla <- list(strategy = "gaussian", int.strategy='eb')
 
 # Model and priors
@@ -27,6 +30,9 @@ fm <- inla.surv(afs, event) ~ 1 +
     f(cid, model="besag", graph=nbmat, constr=TRUE, adjust.for.con.comp = FALSE, scale.model=TRUE)
 
 inla.setOption('smtp', 'tauc')
+
+# Fit separate model for male and female, each with 10 threads and assumed log
+# logistic distribution for the survival time
 
 fit_all_female = inla(fm,
     family='loglogisticsurv',
